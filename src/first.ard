@@ -1,6 +1,10 @@
 \import Data.Maybe
+\import third
 
-{-excercise 1, correct typecheck -}
+{-Exercise 1: Define priorities of the functions
+ f1, f2, f3, f4, f5 and f6 so that the function ‘test’ typechecks. -}
+
+
 \func f1 (x y : Nat) => x
 \func f2 : Nat => 0
 \func \infix 1 f3 (f : Nat -> Nat) (z : Nat) : Int => 0
@@ -47,11 +51,34 @@ and return the first element when b equals to true and the second one otherwise.
   | zero => 1
   | suc x => fac x * suc x
 
-{-Exercise 5: Define mod and gcd.-}
+\func \infixr 2 < (x y : Nat) : Bool \elim x, y
+  | 0, 0 => false
+  | suc n, 0 => false
+  | 0, suc m => true
+  | suc n, suc m => n < m
 
-\func \infixl 1 mod (x y : Nat) : Nat
-  | 0, _ => 0
-  |
+\func \infixr 5 - (x y : Nat) : Maybe Nat \elim x, y
+  | n, 0 => just n
+  | 0, _ => nothing
+  | suc n, suc m => n - m
+
+{-Exercise 5: Define mod and gcd.-}
+\func \infixl 2 ?: {A : \Type} (a : Maybe A) (b : A) : A \elim a
+  | nothing => b
+  | just a => a
+
+
+\func \infixl 1 mod (x y : Nat) : Maybe Nat => {?}
+--  | _, 0 => nothing
+--  | n, m => if (n < m) (just n) ((n - m ?: zero) mod m)
+
+
+\func gcd (n m : Nat) : Nat => {?} -- helper (just n) (just m) \where
+--  \func helper (a b : Maybe Nat) : Nat \elim a, b
+--    | nothing, _ => 0
+--    | _, nothing => 0
+--    | just a, just 0 => a
+--    | just a, just b => helper (just b) (a mod b)
 
 
 {-Exercise 6: Define the map function.-}
@@ -61,12 +88,34 @@ and return the first element when b equals to true and the second one otherwise.
   | nil => ys
   | cons x xs => cons x (xs ++ ys)
 
-\func map (A B : \Type) (f : A -> B) (list : List A) : List B \elim list
+\func map {A B : \Type} (f : A -> B) (list : List A) : List B \elim list
   | nil => nil{B}
-  | cons a (list') => cons (f a) (map A B f list')
+  | cons a (list') => cons (f a) (map f list')
 
 {-Exercise 7: Define the transpose function.
  It takes a list of lists considered as a matrix and
  returns a list of lists which represents the transposed matrix.-}
 
+\func length {A : \Type} (xs : List A) : Nat
+  | nil => zero
+  | cons _ xs => suc (length xs)
 
+\func choose_nth {A : \Type} (n : Nat) (xs : List A) : Maybe A \elim n, xs
+  | _, nil => nothing
+  | zero, cons x xs => just x
+  | suc n, cons x xss => choose_nth n xss
+
+\func choose_every_nth {A : \Type} (xs : List (List A)) (n : Nat) : List (Maybe A) => map (choose_nth n) xs
+
+\func clearNothing {A : \Type} (xs : List (Maybe A)) : List A
+  | nil => nil
+  | cons nothing xs => clearNothing xs
+  | cons (just a) xs => cons a (clearNothing xs)
+
+\func clearDoubleNothing {A : \Type} (xs : List(List (Maybe A))) : List (List A) => map clearNothing xs
+
+\func transpose {A : \Type} (xs : List (List A)) : List (List A) => reverse {List A} (clearDoubleNothing (helpTransp xs (length xs)))
+  \where
+    \func helpTransp {A : \Type} (xss : List(List A)) (large_n : Nat) : List (List (Maybe A)) \elim large_n
+      | zero => nil
+      | suc n => cons (choose_every_nth xss (suc n)) (helpTransp xss n)
