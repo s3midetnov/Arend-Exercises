@@ -1,0 +1,106 @@
+\import first
+
+{-Exercise 1: Prove that (P -> Q -> R) -> (P -> Q) -> P -> R.-}
+
+--\lam pq_r p_q p => pq_r p p_q
+\func theorem {P Q R : \Prop} : (P -> Q -> R) -> (P -> Q) -> P -> R =>
+  \lam pq_r p_q p => pq_r p (p_q p)
+
+{-Exercise 2: Prove that ((P -> Q -> R) -> P) -> (P -> R) -> R.-}
+
+\func lemma {P Q R : \Prop} (prf : P -> R) : P -> Q -> R =>
+  \lam p q => prf p
+
+\func theorem2 {P Q R : \Prop} (a : (P -> Q -> R) -> P) (b : P -> R) : R
+  => b (a (lemma b))
+
+
+{-Exercise 3: Prove that ((P && Q) -> R) -> P -> Q -> R.-}
+\func \infixr 3 && (P Q : \Type) => \Sigma P Q
+
+\func theorem3 {P Q R : \Prop} : ((P && Q) -> R) -> P -> Q -> R =>
+  \lam pq_r p q => pq_r (p, q)
+
+{-Exercise 4: Prove that (P -> Q -> R) -> (P && Q) -> R.-}
+
+\func theorem4 {P Q R : \Prop} : (P -> Q -> R) -> (P && Q) -> R =>
+  \lam fun pair => fun pair.1 pair.2
+
+{-Exercise 5: Prove that (P -> R) -> (Q -> R) -> P || Q -> R.-}
+\data \infixr 2 || (P Q : \Type)
+  | inl P
+  | inr Q
+
+\func theorem5 {P Q R : \Prop} (fun_p : P -> R) (fun_q : Q -> R) (pq : P || Q) : R \elim pq
+  | inl pq => fun_p pq
+  | inr pq => fun_q pq
+
+-- This function proves that P -> (P || Q)
+\func ||-intro1 {P Q : \Type} (p : P) : P || Q => inl p
+
+-- This function proves that Q -> (P || Q)
+\func ||-intro2 {P Q : \Type} (q : Q) : P || Q => inr q
+
+{-Exercise 6: Prove that ((P || Q) -> (P && Q)) -> ((P -> Q) && (Q -> P)).-}
+\func theorem6 {P Q R : \Prop} (pq : P || Q -> P && Q) : (P -> Q) && (Q -> P) =>
+  (\lam p => (pq (inl p)).2, \lam q => (pq (inr q)).1)
+
+{-Exercise 7: Russell’s paradox shows that there is no set of all sets.
+ If such a set exists, then we can form the set B of sets which are not members of themselves.
+ Then B belongs to itself if and only if it is not. This implies a contradiction.
+ Cantor’s theorem states that there is no set X with a surjection from X onto the set of subsets of X.
+  Its proof also constructs a proposition which is true if and only if it is false.
+   Prove that more generally the existence of any such proposition implies a contradiction.
+ -}
+
+
+{-Exercise 8: Prove that if, for every x : Nat, P x is true, then there exists x : Nat such that P x is true.-}
+\func theorem8 (P : Nat -> \Prop) (prf : \Pi (x : Nat) -> P x) : \Sigma (x : Nat) (P x) => (zero, prf zero)
+
+
+{-Exercise 9: Prove that if there is no x : Nat such that P x holds, then P 3 is false.-}
+-- forall x : Nat not(P x) => not P(3)
+
+\data Empty
+
+\func Not (P : \Type) => P -> Empty
+
+\func three => suc (suc (suc zero))
+\func theorem9 (P : Nat -> \Prop) (prf : \Pi (x : Nat) -> Not (P x)) : Not (P three) => prf three
+
+{-Exercise 10: Prove that if, for every x : Nat, P x implies Q x, then the existence of an element
+ x : Nat for which P x is true implies the existence of an element x : Nat for which Q x is true.-}
+
+\func theorem10 (P Q : Nat -> \Prop) (prf : \Pi (x : Nat) -> P x -> Q x) (exists : \Sigma (x : Nat) (P x)) : \Sigma(x : Nat) (Q x)
+  => (exists.1, prf exists.1 exists.2)
+
+{-Exercise 11: Prove that if, for every x : Nat, either P x is false
+ or Q x is false, then P 3 implies that Q 3 is false.-}
+
+\func xAndNotx-false {P : \Prop} (prf : P) (prf_f : Not P) : Empty => prf_f prf
+
+\func theorem11' (P Q : Nat -> \Prop) (prf3 : Not (P three) || Not (Q three)) : P three -> Not (Q three) \elim prf3
+  | inl notp => \lam p3 q3 => xAndNotx-false p3 notp
+  | inr notq => \lam p3 q3 => notq q3
+
+\func theorem11 (P Q : Nat -> \Prop) (prf : \Pi (x : Nat) -> Not (P x) || Not (Q x)) : P three -> Not (Q three) =>
+  theorem11' P Q (prf three)
+
+
+{-Exercise 12: Prove associativity of and and or.-}
+\func T (b : Bool) : \Type
+  | true => Unit
+  | false => Empty
+
+\func \infix 4 == (x y : Bool) : Bool
+  | true, true => true
+  | false, false => true
+  | _ , _ => false
+
+\func not-isInvolution'' (x : Bool) : not (not x) = x
+  | true => idp
+  | false => idp
+
+
+
+{-Exercise 13: Prove that 2 * 2 equals to 4.-}

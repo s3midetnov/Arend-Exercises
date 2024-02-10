@@ -1,0 +1,72 @@
+\import Data.Maybe
+
+{-excercise 1, correct typecheck -}
+\func f1 (x y : Nat) => x
+\func f2 : Nat => 0
+\func \infix 1 f3 (f : Nat -> Nat) (z : Nat) : Int => 0
+\func f4 : Nat => 0
+\func \infix 8 f5 => f1
+\func f6 => f4
+\func test => f1 f2 f3 f4 f5 f6
+
+{-Exercise 2: Define the function ‘if’,
+which takes a boolean value b and two elements of an arbitrary type A
+and return the first element when b equals to true and the second one otherwise.-}
+
+\data Bool | false | true
+
+\data Unit | unit
+
+\func not (_ : Bool) : Bool
+  | true => false
+  | false => true
+
+\func if {A : \Type} (b : Bool) (x y : A) : A \elim b
+  | true => x
+  | false => y
+
+\func \infix 9 and (x y : Bool) : Bool => if x y x
+
+{-Exercise 3: Define || via ‘if’.-}
+\func \infix 7 || (a b : Bool) : Bool => if a a b
+
+{-Exercise 4: Define the power and the factorial functions for natural numbers.-}
+\func \infixl 6 + (x y : Nat) : Nat \elim y
+  | zero => x
+  | suc y => suc (x + y)
+
+\func \infixl 7 * (x y : Nat) : Nat \elim y
+  | zero => zero
+  | suc y => x * y + x
+
+\func \infixr 8 ^ (x y : Nat) : Nat \elim y
+  | zero => 1
+  | suc y => x ^ y * x
+
+\func fac (x : Nat) : Nat
+  | zero => 1
+  | suc x => fac x * suc x
+
+{-Exercise 5: Define mod and gcd.-}
+
+\func \infixl 1 mod (x y : Nat) : Nat
+  | 0, _ => 0
+  |
+
+
+{-Exercise 6: Define the map function.-}
+\data List (A : \Type) | nil | cons A (List A)
+
+\func \infixl 6 ++ {A : \Type} (xs ys : List A) : List A \elim xs
+  | nil => ys
+  | cons x xs => cons x (xs ++ ys)
+
+\func map (A B : \Type) (f : A -> B) (list : List A) : List B \elim list
+  | nil => nil{B}
+  | cons a (list') => cons (f a) (map A B f list')
+
+{-Exercise 7: Define the transpose function.
+ It takes a list of lists considered as a matrix and
+ returns a list of lists which represents the transposed matrix.-}
+
+

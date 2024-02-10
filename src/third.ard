@@ -1,0 +1,7 @@
+\import second
+{-Exercise 1: Implement the function lookup, which takes a list xs and a natural number n
+and returns the n-th element in the list. The function should also take a proof that n is in the right range:
+ T (n < length xs).-}
+
+\func lookup {A : \Type} (xs : List A) (n : Nat) (p : T (n < length sx)) : A \elim n
+  | zero =>
