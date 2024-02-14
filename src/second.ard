@@ -1,5 +1,16 @@
 \import first
 
+\func absurd {A : \Type} (e : Empty) : A
+-- There are no patterns since Empty does not have constructors.
+
+-- This can be expressed more explicitly by means of the absurd patterns.
+-- This pattern indicates that the data type of the corresponding variable does not have constructors.
+-- If such a pattern is used, the right hand side of the clause can (and should) be omitted.
+\func absurd' {A : \Type} (e : Empty) : A \elim e
+  | () -- absurd pattern
+
+\func Unit-isTrue : Unit => unit
+
 {-Exercise 1: Prove that (P -> Q -> R) -> (P -> Q) -> P -> R.-}
 
 --\lam pq_r p_q p => pq_r p p_q
@@ -52,6 +63,9 @@
   Its proof also constructs a proposition which is true if and only if it is false.
    Prove that more generally the existence of any such proposition implies a contradiction.
  -}
+
+--\func theorem7 : Not (\Sigma (P : \Prop) ((P -> Not P) && (Not P -> P))) =>
+
 
 
 {-Exercise 8: Prove that if, for every x : Nat, P x is true, then there exists x : Nat such that P x is true.-}
