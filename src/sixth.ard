@@ -1,0 +1,95 @@
+\import first
+\import fourth
+\import fifth
+
+\data NatPair | natPair Nat Nat
+
+\func natFst (p : NatPair) : Nat
+  | natPair x _ => x
+
+\func natSnd (p : NatPair) : Nat
+  | natPair _ y => y
+
+\record NatPair'
+  | fst : Nat
+  | snd : Nat
+
+{-Exercise 1: Define the function swap, which swaps components in pairs,
+in several ways: a) using \cowith and field access, b) using \new and pattern matching,
+ c) using \new and field access.-}
+
+\func swap1 (p : NatPair') : NatPair' \cowith
+  | fst => p.snd
+  | snd => p.fst
+
+\func swap2 (p : NatPair') : NatPair' => \new NatPair' {
+  | fst => p.snd
+  | snd => p.fst
+}
+
+\func swap3 (p : NatPair') : NatPair' => \new NatPair' {| fst => p.snd | snd => p.fst}
+
+{-Exercise 2: Prove that swap (swap p) = p.-}
+\func swap => swap1
+\func swapswap=id (p : NatPair') : swap (swap p) = p => idp
+
+{-Exercise 3: Prove that the type PosNat 0 is empty, but the type PosNat 1 is not.-}
+\data Bool | true | false
+
+-- compare this definition of T with the one in module Basics
+\data T (b : Bool) \with
+  | true => tt
+
+\func isPos (n : Nat) : Bool
+  | 0 => false
+  | suc _ => true
+
+\record PosNat (n : Nat) (p : T (isPos n))
+
+
+{-Exercise 4: Define the \record consisting of pairs of coprime natural numbers.
+Define the type of natural numbers that are coprime with 60.-}
+
+
+
+\func coprime (n m : Nat) : \Prop => gcd n m = one
+
+\record coprimeNat (n m : Nat) (p : coprime n m)
+
+\func coprimeWith60 : \Type => coprimeNat {| n => 60}
+
+
+\class Monoid (A : \Type)
+  | id : A
+  | \infixl 6 * : A -> A -> A
+  | *-assoc (x y z : A) : (x * y) * z = x * (y * z)
+  -- | *-assoc : \Pi (x y z : A) -> (x * y) * z = x * (y * z)
+  | id-left (x : A) : id * x = x
+  | id-right (x : A) : x * id = x
+
+\func baz (m : Monoid Nat 0 (Nat.+)) => m.*-assoc
+
+\class CommMonoid \extends Monoid
+  | *-comm (x y : A) : x * y = y * x
+  | id-right x => *-comm x id *> id-left x
+
+
+{-Exercise 5: Define the class of monads, which extends the class of functors Functor.
+Define \instance of this class for Maybe.-}
+
+\class Functor (F : \Type -> \Type)
+  | fmap {A B : \Type} (f : A -> B) : F A -> F B
+  | fmap-id {A : \Type} (y : F A) : fmap (\lam (x : A) => x) y = y
+  | fmap-comp {A B C : \Type} (f : A -> B) (g : B -> C) (y : F A)
+    : fmap (\lam x => g (f x)) y = fmap g (fmap f y)
+
+\class Monad \extends Functor
+  | unit {A : \Type} (x : A) : F A
+  | \infix 7 >>= {A B : \Type} (x : F A) (f : A -> F B) : F B
+  | unit-bind-left {A B : \Type} (x : A) (f : A -> F B) : unit x >>= f = f x
+  | unit-bind-right {A : \Type} (Fa : F A) : Fa >>= unit = Fa
+  | bind-ess-assoc {A B C : \Type} (Fa : F A) (f : A -> F B) (g : B -> F C)
+    : Fa >>= (\lam x => f(x) >>= g) = (Fa >>= f) >>= g
+
+\instance monadic-Maybe : Monad Maybe
+

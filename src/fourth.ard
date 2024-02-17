@@ -1,4 +1,5 @@
 \import first
+\import second (not-isInvolution'')
 
 \func Leibniz {A : \Type} {a a' : A}
               (f : \Pi (P : A -> \Type) -> \Sigma (P a -> P a') (P a' -> P a)) : a = a'
@@ -48,7 +49,7 @@
 
 {-Exercise 4: Prove that a = {A} a’ and b = {B} b’ implies (a,b) = {\Sigma A B} (a’,b’) without using transport.-}
 
---\func exc4 {A B : \Type} {a a' : A} {b b' : B} (p : a = {A} a') (q : b = {B} b') : (a,b) = {\Sigma A B} (a’,b’)
+--\func exc4 {A B : \Type} {a a' : A} {b b' : B} (p : a = {A} a') (q : b = {B} b') : (a,b) = (a’ , b’ )
 
 {-Exercise 5: Prove that p = {\Sigma (x : A) (B x)} p’ implies p.1 = {A} p’.1 without using transport.-}
 
@@ -57,6 +58,14 @@
   => path (\lam i => \lam a => p a @ i)
 
 {-Exercise 6: Prove that (\lam x => not (not x)) = (\lam x => x)-}
+
+\func f_1 => \lam x => not (not x)
+\func f_2 (x : Bool) : Bool => x
+
+\func const (_ : Bool) : \Type => Bool
+
+\func theorem6 : f_1 = f_2 =>
+  funExt {Bool} const f_1 f_2 not-isInvolution''
 
 
 -- Dependent eliminator for Nat (induction).

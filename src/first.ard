@@ -1,8 +1,9 @@
-\import Data.Maybe
 \import third
 
 {-Exercise 1: Define priorities of the functions
  f1, f2, f3, f4, f5 and f6 so that the function ‘test’ typechecks. -}
+
+\data Maybe (A : \Type) | just A | nothing
 
 
 \func f1 (x y : Nat) => x
@@ -30,6 +31,12 @@ and return the first element when b equals to true and the second one otherwise.
   | false => y
 
 \func \infix 9 and (x y : Bool) : Bool => if x y x
+
+\func \infix 9 or (x y : Bool) : Bool \elim x, y
+  | true, true => true
+  | true, false => true
+  | false, true => true
+  | false, false => false
 
 {-Exercise 3: Define || via ‘if’.-}
 \func \infix 7 || (a b : Bool) : Bool => if a a b

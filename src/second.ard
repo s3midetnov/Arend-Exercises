@@ -64,7 +64,9 @@
    Prove that more generally the existence of any such proposition implies a contradiction.
  -}
 
---\func theorem7 : Not (\Sigma (P : \Prop) ((P -> Not P) && (Not P -> P))) =>
+--\func theorem7 (P : \Prop) (p1 : P -> Not P) (p2 : Not P -> P) : Empty
+--  =>
+
 
 
 
@@ -115,6 +117,32 @@
   | true => idp
   | false => idp
 
+\func and-is-assoc (x y z : Bool) : x and (y and z) = (x and y) and z
+  \elim x, y, z
+    | true, true, true => idp
+    | true, true, false => idp
+    | true, false, false => idp
+    | true, false, true => idp --
+    | false, true, true => idp
+    | false, true, false => idp
+    | false, false, false => idp
+    | false, false, true => idp
 
+\func or-is-assoc(x y z : Bool) : x or (y or z) = (x or y) or z
+  \elim x, y, z
+  | true, true, true => idp
+  | true, true, false => idp
+  | true, false, false => idp
+  | true, false, true => idp
+  | false, true, true => idp
+  | false, true, false => idp
+  | false, false, false => idp
+  | false, false, true => idp
 
 {-Exercise 13: Prove that 2 * 2 equals to 4.-}
+\func two => suc (suc zero)
+\func four => suc (suc (suc (suc zero)))
+
+\func two-times-two : two * two = four =>
+  idp
+
