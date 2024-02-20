@@ -64,9 +64,13 @@
    Prove that more generally the existence of any such proposition implies a contradiction.
  -}
 
---\func theorem7 (P : \Prop) (p1 : P -> Not P) (p2 : Not P -> P) : Empty
---  =>
+\func theorem7 (P : \Prop) (p1 : P -> Not P) (p2 : Not P -> P) : Empty => p1 w w
+    \where \func w => helper7' P p1 p2 (helper7 P p1 p2)
 
+\func helper7' (P : \Prop) (p1 : P -> Not P) (p2 : Not P -> P) (e : Not P) : P => p2 e
+
+\func helper7 (P : \Prop) (p1 : P -> Not P) (p2 : Not P -> P) : Not P =>
+  \lam (x : P) => (p1 x) x
 
 
 

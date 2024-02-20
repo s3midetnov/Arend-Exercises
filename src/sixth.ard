@@ -91,5 +91,21 @@ Define \instance of this class for Maybe.-}
   | bind-ess-assoc {A B C : \Type} (Fa : F A) (f : A -> F B) (g : B -> F C)
     : Fa >>= (\lam x => f(x) >>= g) = (Fa >>= f) >>= g
 
-\instance monadic-Maybe : Monad Maybe
 
+\func functorial-Maybe {A B : \Type} (f : A -> B) (x : Maybe A) : Maybe B \elim x
+  | just a => just (f a)
+  | nothing => nothing
+
+--\instance monadic-Maybe : Monad Maybe
+--  | fmap {A B : \Type} (f : A -> B) : Maybe A -> Maybe B => functorial-Maybe f
+--  | fmap-id {A : \Type} (y : Maybe A) : fmap (\lam (x : A) => x) y = y => {?}
+
+
+
+{-Exercise 6: Define instances for the class of monads for State and State’. -}
+
+\record State (S A : \Type)
+  | state : S -> \Sigma S A
+
+\data State' (S A : \Type)
+  | state' (S -> \Sigma S A)

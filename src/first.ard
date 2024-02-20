@@ -1,3 +1,4 @@
+\import second
 \import third
 
 {-Exercise 1: Define priorities of the functions
@@ -75,9 +76,11 @@ and return the first element when b equals to true and the second one otherwise.
   | just a => a
 
 
-\func \infixl 1 mod (x y : Nat) : Maybe Nat => {?}
---  | _, 0 => nothing
---  | n, m => if (n < m) (just n) ((n - m ?: zero) mod m)
+\func check : Nat => (three - four ?: 0)
+
+\func \infixl 1 mod (x y : Nat) : Maybe Nat \elim x, y
+  | _, 0 => nothing
+  | n, suc m => if (n < suc m) (just n)
 
 
 \func gcd (n m : Nat) : Nat => {?} -- helper (just n) (just m) \where

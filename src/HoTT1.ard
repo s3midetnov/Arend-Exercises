@@ -1,12 +1,40 @@
+\import first
+\import second (T)
+
 {-Exercise 1: Let f : A -> B and g : B -> C be some functions.
  Prove that if f and g are injective, then g o f is also injective.
  Prove that if g o f is injective, then f is also injective.-}
 
-\func Injective (A B : \Type) (f : A -> B) : \Type => \Pi (x y : A) -> f x = f y -> x = y
+\func isInj {A B : \Type} (f : A -> B) : \Type =>
+  \Pi (x y : A) -> f x = f y -> x = y
 
-\func \infix 7 ee {A B C : \Type} (f : A -> B) (g : B -> C) : A -> C =>
-  \lam a => g (f a)
+\func \infix 4 @ {A B C : \Type} (g : B -> C) (f : A -> B) : A -> C => \lam (x : A) => g (f x)
+
+--\func theorem {A B C : \Type} (f : A -> B) (g : B -> C) (p : isInj f) (q : isInj g) : isInj (g @ f)
+--  => \lam (x y : A) =>
 
 
 
+{-Exercise 2: Define the predicate “divisible by 3 or by 5” in such a way that it becomes a proposition.
+Prove that MultipleOf3Or5 embeds in Nat.-}
 
+\func divisibleby3 (n : Nat) : Bool
+  | 0 => true
+  | 1 => false
+  | 2 => false
+  | suc (suc (suc n)) => divisibleby3 n
+
+\func divisibleby5 (n : Nat) : Bool
+  | 0 => true
+  | 1 => false
+  | 2 => false
+  | 3 => false
+  | 4 => false
+  | suc (suc (suc (suc (suc n)))) => divisibleby5 n
+
+
+\func MultipleOf3Or5 =>  \Sigma (n : Nat) (T(divisibleby3 n or divisibleby5 n))
+
+\func embedding_3_or_5 (e : MultipleOf3Or5) => e.1
+
+\func isEmbed : isInj embedding_3_or_5 => {?}
