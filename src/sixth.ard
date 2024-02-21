@@ -1,6 +1,7 @@
 \import first
 \import fourth
 \import fifth
+\import second (Empty, Not)
 
 \data NatPair | natPair Nat Nat
 
@@ -47,6 +48,7 @@ in several ways: a) using \cowith and field access, b) using \new and pattern ma
 \record PosNat (n : Nat) (p : T (isPos n))
 
 
+
 {-Exercise 4: Define the \record consisting of pairs of coprime natural numbers.
 Define the type of natural numbers that are coprime with 60.-}
 
@@ -57,7 +59,6 @@ Define the type of natural numbers that are coprime with 60.-}
 \record coprimeNat (n m : Nat) (p : coprime n m)
 
 \func coprimeWith60 : \Type => coprimeNat {| n => 60}
-
 
 \class Monoid (A : \Type)
   | id : A
@@ -92,9 +93,12 @@ Define \instance of this class for Maybe.-}
     : Fa >>= (\lam x => f(x) >>= g) = (Fa >>= f) >>= g
 
 
-\func functorial-Maybe {A B : \Type} (f : A -> B) (x : Maybe A) : Maybe B \elim x
+\func functorial-Maybe-morph {A B : \Type} (f : A -> B) (x : Maybe A) : Maybe B \elim x
   | just a => just (f a)
   | nothing => nothing
+
+
+
 
 --\instance monadic-Maybe : Monad Maybe
 --  | fmap {A B : \Type} (f : A -> B) : Maybe A -> Maybe B => functorial-Maybe f

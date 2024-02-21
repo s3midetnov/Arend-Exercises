@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94d4be5e-9b56-4966-96e1-ef10b8a671ad" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/HoTT1.arc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/fifth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/fifth.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/first.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/first.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/fourth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/fourth.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/second.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/second.arc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/first.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/first.ard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/seventh.arc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/sixth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/sixth.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fourth.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/fourth.ard" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/second.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/second.ard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sixth.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/sixth.ard" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +57,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Arend Typecheck.Typecheck not-isInvolution''">
+  <component name="RunManager" selected="Arend Typecheck.Typecheck T_">
     <configuration name="Typecheck T" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="Arend-Exercises" />
       <option name="allowRunningInParallel" value="false" />
@@ -68,6 +72,20 @@
       </parameters>
       <method v="2" />
     </configuration>
+    <configuration name="Typecheck T_" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="Arend-Exercises" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <parameters>
+        <option name="definitionFullName" value="T_" />
+        <option name="library" value="Arend-Exercises" />
+        <option name="modulePath" value="fourth" />
+      </parameters>
+      <method v="2" />
+    </configuration>
     <configuration name="Typecheck ==" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="Arend-Exercises" />
       <option name="allowRunningInParallel" value="false" />
@@ -79,6 +97,20 @@
         <option name="definitionFullName" value="==" />
         <option name="library" value="Arend-Exercises" />
         <option name="modulePath" value="second" />
+      </parameters>
+      <method v="2" />
+    </configuration>
+    <configuration name="Typecheck coprime" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="Arend-Exercises" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <parameters>
+        <option name="definitionFullName" value="coprime" />
+        <option name="library" value="Arend-Exercises" />
+        <option name="modulePath" value="sixth" />
       </parameters>
       <method v="2" />
     </configuration>
@@ -98,6 +130,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Arend Typecheck.Typecheck T_" />
+        <item itemvalue="Arend Typecheck.Typecheck coprime" />
         <item itemvalue="Arend Typecheck.Typecheck not-isInvolution''" />
         <item itemvalue="Arend Typecheck.Typecheck ==" />
         <item itemvalue="Arend Typecheck.Typecheck T" />
@@ -114,6 +148,9 @@
       <updated>1707504790436</updated>
       <workItem from="1707504795350" duration="9240000" />
       <workItem from="1707942731544" duration="11678000" />
+      <workItem from="1708195839550" duration="7641000" />
+      <workItem from="1708447235011" duration="712000" />
+      <workItem from="1708532372083" duration="4883000" />
     </task>
     <servers />
   </component>

@@ -1,5 +1,6 @@
 \import first
-\import second (not-isInvolution'')
+\import second (Empty, not-isInvolution'', three, two)
+\import HoTT1 (cmp)
 
 \func Leibniz {A : \Type} {a a' : A}
               (f : \Pi (P : A -> \Type) -> \Sigma (P a -> P a') (P a' -> P a)) : a = a'
@@ -35,6 +36,19 @@
 {-Exercise 2: Prove that transport can be defined via pmap and repl and vice versa.
  The function repl says that if two types are equal then there exists a function between them.-}
 
+\func repl {A B : \Type} (eq : A = B) : A -> B => {?}
+
+\func repl-from-transport {A B : \Type} (eq : A = B) : A -> B =>
+  \lam (a : A) => transport {\Type} id' eq a
+
+\func pmap-from-transport {A B : \Type} (f : A -> B) {a a' : A} (p : a = a') : f a = f a' => pmap f p
+-- it is already defined through transport
+
+
+\func transport-from-repl-and-pmap {A : \Type} (B : A -> \Type) {a a' : A} (p : a = a') (b : B a) : B a'
+  => repl (pmap B p ) b
+
+\func id' : \Type -> \Type => \lam a => a
 {-path (f : I -> A) : f left = f right
 
   path f @ i ==> f i -- beta-equivalence
@@ -49,9 +63,14 @@
 
 {-Exercise 4: Prove that a = {A} a’ and b = {B} b’ implies (a,b) = {\Sigma A B} (a’,b’) without using transport.-}
 
---\func exc4 {A B : \Type} {a a' : A} {b b' : B} (p : a = {A} a') (q : b = {B} b') : (a,b) = (a’ , b’ )
+\func exc4 {A B : \Type} {a aa : A} {b bb : B} (p : a = {A} aa) (q : b = {B} bb) : (a,b) = (aa , bb ) =>
+  congruence2 f p q \where
+  \func f : A -> B -> \Sigma A B => \lam a b => (a, b)
 
 {-Exercise 5: Prove that p = {\Sigma (x : A) (B x)} p’ implies p.1 = {A} p’.1 without using transport.-}
+
+\func exc5 {A : \Type} {B : A -> \Type} {p pp : \Sigma (x : A) (B x)} (q : p = {\Sigma (x : A) (B x)} pp) :
+  p.1 = {A} pp.1 => pmap (\lam (p : \Sigma (x : A) (B x)) => p.1) q
 
 \func funExt {A : \Type} (B : A -> \Type) {f g : \Pi (a : A) -> B a}
              (p : \Pi (a : A) -> f a = g a) : f = g
@@ -65,7 +84,7 @@
 \func const (_ : Bool) : \Type => Bool
 
 \func theorem6 : f_1 = f_2 =>
-  funExt {Bool} const f_1 f_2 not-isInvolution''
+  funExt (\lam _ => Bool) not-isInvolution''
 
 
 -- Dependent eliminator for Nat (induction).
@@ -99,6 +118,63 @@
 \func n! (n : Nat) : Nat => Nat-rec Nat one (\lam m x => x * suc m) n
 
 {-Exercise 8: Prove associativity of Nat.+ via Nat-elim (i.e., without recursion and pattern matching).-}
+\func checker : Nat -> \Type =>
+  \lam (z : Nat) => \Pi (x y : Nat) -> (x + y) + z = x + (y + z)
+
+\func base-of-ind : \Pi (x y : Nat) -> (x + y) + 0 = x + (y + 0) => {?}
+
+\func step-of-ind : \Pi(n : Nat) -> checker n -> checker (suc n) => {?}
+
+\func +-is-assoc (x y z : Nat) : (x + y) + z = x + (y + z) => (Nat-elim checker base-of-ind step-of-ind z) x y
 
 
+{-Exercise 9: Define recursor and eliminator for \data D | con1 Nat | con2 D D | con3 (Nat -> D).-}
+\data D | con1 Nat | con2 D D | con3 (Nat -> D)
 
+{-Exercise 10: Define recursor and eliminator for List.-}
+
+{-Exercise 11: We defined transport via coe. It is possible to define a special case of coe via transport.
+Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possible to define transport via coe0?-}
+
+\func coe0 (A : I -> \Type) (a : A left) : A right => transport {I} A {left} {right} left=right a
+
+\func transport' {A : \Type} (B : A -> \Type) {a a' : A} (p : a = a') (b : B a) : B a'
+  => coe (\lam i => B (p @ i)) b right
+
+{-Exercise 12: Define a function B right -> B left.-}
+
+\func coe0'5 (A : I -> \Type) (a : A right) : A left => transport {I} A (inv left=right) a
+
+\func exc12 (B : I -> \Type) : B right -> B left =>  coe0'5 B
+
+ {- Exercise 13: Prove that 0 does not equal to suc x.-}
+
+\func T_ ( x : Bool) : \Type
+  | false => Empty
+  | true => Unit
+
+\func true/=false (p : true = false) : Empty => transport T_ p unit
+
+\func splitter (_ : Nat) :  Bool
+  | 0 => false
+  | suc n => true
+
+\func zero-neq-suc-x {n : Nat} (p : 0 = suc n) : Empty =>
+  true/=false (inv (pmap splitter p))
+
+{-Exercise 14: Prove that fac does not equal to suc.-}
+
+\func bigger-hence-not-equal (n m : Nat) (p : n < m = true) (q : n = m) : Empty => {?}
+
+\func two-action (f : Nat -> Nat) : Nat => f two
+
+\func two-neq-three (p : 2 = 3) : Empty
+
+\func check1 : (two-action fac) = two  => idp
+\func check2 : (two-action suc) = three  => idp
+\func special-helper {A B : \Type} {f : A -> B} {a a_ b b_ : A} (p : f a = f b) (q : a = a_) (qq : b = b_) :
+  (f a_ = f b_) => {?}
+
+--\func fac-neq-suc (p : fac = suc) : Empty =>
+--  two-neq-three (two-action r check1 check2)
+--  \where \func r : two-action fac = two-action suc => pmap two-action p
