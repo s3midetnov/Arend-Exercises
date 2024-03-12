@@ -1,5 +1,22 @@
-\import first
-\import second (T)
+\import fifth
+\import first \hiding (||)
+\import second
+\import fourth
+
+\func sigmaEq {A : \Type} (B : A -> \Type) (t1 t2 : \Sigma (x : A) (B x))
+  -- t1.2 : B t1.1
+  -- t2.2 : B t2.1
+              (p : t1.1 = t2.1) (q : transport B p t1.2 = t2.2)
+  : t1 = t2
+  {-
+  \elim t1,t2,p,q
+  | (a1,b1), (a2,b2), idp, idp => idp
+  -}
+  => J (\lam a' p' =>
+      \Pi (b' : B a') (q' : transport B p' t1.2 = b') -> t1 = (a',b'))
+      (\lam b' q' => pmap (\lam b'' => ((t1.1,b'') : \Sigma (x : A) (B x))) q')
+      p t2.2 q
+
 
 {-Exercise 1: Let f : A -> B and g : B -> C be some functions.
  Prove that if f and g are injective, then g o f is also injective.
@@ -10,9 +27,11 @@
 
 \func \infix 4 cmp {A B C : \Type} (g : B -> C) (f : A -> B) : A -> C => \lam (x : A) => g (f x)
 
---\func theorem {A B C : \Type} (f : A -> B) (g : B -> C) (p : isInj f) (q : isInj g) : isInj (g @ f)
---  => \lam (x y : A) =>
+\func comp-of-inj {A B C : \Type} (f : A -> B) (g : B -> C) (p : isInj f) (q : isInj g) : isInj (g cmp f)
+  => \lam (x y : A) => p x y cmp q (f x) (f y)
 
+\func comp-inj-hence-first-inj {A B C : \Type} (f : A -> B) (g : B -> C) (p : isInj (g cmp f)) : isInj f =>
+  \lam (x y : A) (q : f x = f y) => (p x y) (pmap g q)
 
 
 {-Exercise 2: Define the predicate “divisible by 3 or by 5” in such a way that it becomes a proposition.
@@ -32,9 +51,106 @@ Prove that MultipleOf3Or5 embeds in Nat.-}
   | 4 => false
   | suc (suc (suc (suc (suc n)))) => divisibleby5 n
 
+\func appropriate (n : Nat) : Bool => divisibleby3 n or divisibleby5 n
 
-\func MultipleOf3Or5 =>  \Sigma (n : Nat) (T(divisibleby3 n or divisibleby5 n))
+\func MultipleOf3Or5 =>  \Sigma (n : Nat) (T(appropriate n))
 
 \func embedding_3_or_5 (e : MultipleOf3Or5) => e.1
 
-\func isEmbed : isInj embedding_3_or_5 => {?}
+
+\func isProp (A : \Type) => \Pi (x y : A) -> x = y
+
+{-Exercise 3: We say that a type A is trivial if there exists an element in A such that it is equal
+to any other element in A. Prove that A is trivial iff A is proposition and there is an element in A.-}
+
+\func isTrivial (A : \Type) => \Sigma (x : A) (\Pi (y : A) -> x = y)
+
+\func thm1 (A : \Type) (p : isTrivial A) : A && isProp A =>
+  (p.1,
+   \lam (x y : A) =>
+       inv (p.2 x) *> p.2 y
+  )
+
+\func thm1_2 (A : \Type) (pt : A) (p : isProp A) : isTrivial A =>
+  (pt, \lam (y : A) => p pt y)
+
+
+{-Exercise 4: Prove that Either is not a proposition in general.-}
+
+\data Either (A B : \Type)
+  | Left A
+  | Right B
+
+\func pseudo-Bool => Either Unit Unit
+
+\func iso-Bool (x : pseudo-Bool) : Bool
+  | Left unit => false
+  | Right unit => true
+
+\func either-not-prop : \Sigma (x y : pseudo-Bool) (Not (x = y)) =>
+  (Left unit, Right unit,  \lam (p : Left unit = Right unit) => true/=false (pmap iso-Bool (inv p)))
+
+  {-Exercise 5: Prove that \Sigma (x : A) (B x) preserves propositions. -}
+
+\func sigma-closed {A : \Type} {B : A -> \Type} (q : \Pi (a : A) -> isProp (B a)) (p : isProp A) : isProp (\Sigma (x : A) (B x)) =>
+  \lam (a, b) (a', b') => sigmaEq B (a, b) (a', b') (p a a') ((q a') (transport B (p a a') b) b')
+
+\func isSet (A : \Type) => \Pi (a a' : A) -> isProp (a = a')
+
+
+{- Exercise 6: Prove that <= and <=’’ are predicates.
+It is allowed to use the fact that Nat is a set without a proof.-}
+
+-- Defines predicate valued in propositions
+\data \infix 4 <= (n m : Nat) \with
+  | 0, _ => zero<=_
+  | suc n, suc m => suc<=suc (n <= m)
+
+\data <='' (n m : Nat) : \Set0 \elim m
+  | suc m => <=-step (<='' n m)
+  | m => <=-refl (n = m)
+
+\func <=-isProp : \Pi (a b : Nat) -> isProp (a <= b) =>
+  \lam (a b : Nat) (p q : a <= b) =>
+
+
+{- Exercise 8: Prove that if A embeds in B and B is a proposition, then A is proposition. -}
+
+\func embed-property {A : \Type} {B : \Type} (q : isProp B) (f : A -> B) (inj : isInj f) : isProp A =>
+  \lam (a a' : A) => inj a a' (q (f a) (f a'))
+
+
+{-Exercise 9: Prove that a type with decidable equality is a set.
+Note that this implies that Nat is a set since we have already proved that Nat has decidable equality.-}
+
+\data Decide (A : \Type)
+  | yes A
+  | no (A -> Empty)
+
+\func DecEq (A : \Type) => \Pi (a a' : A) -> Decide (a = a')
+
+\func Empty-isProp : isProp Empty => \lam x y => absurd x
+
+\func decid-equal=>set {A : \Type} (p : DecEq A) : isSet A =>
+  \lam (a b : A) => \case p a b \with {
+    | yes a1 => \lam (x y : a = b) => {?}
+    | no _x => \lam (x y : a = b) =>
+  }
+
+{-Exercise 10: Prove that if A and B are sets, then A Or B is also a set.-}
+
+--\func or-pres-sets (A B : \Set) : isSet (A Or B)
+\data \infix 3 Or (A B : \Type)
+  | inl A
+  | inr B
+
+\func helper-for-or-is-set (A B : \Set) (x : A) (y : B) (p : inl x = {A Or B} inr y) : Empty => {?}
+
+\func for-or-is-set (A B : \Set) (x y : A Or B) : isProp (x = y) \elim x, y
+  | inl x, inl y => 
+
+
+{-Exercise 11: Prove that if B x is a set, then \Pi (x : A) -> B x is a set.-}
+
+\func pi-set (A : \Type) (B : A -> \Set) : isSet (\Pi (x : A) -> B x) =>
+  \lam (a b : (\Pi (x : A) -> B x)) (p q )

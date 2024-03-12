@@ -1,5 +1,7 @@
 \import first
 \import fourth
+\import second (&&, Empty)
+\import HoTT2
 
 \func \infixr 5 *> {A : \Type} {a a' a'' : A} (p : a = a') (q : a' = a'') : a = a''
   => transport (\lam x => a = x) q p
@@ -34,9 +36,110 @@
 
 {-Exercise 1: Prove that J and Jalt are equivalent, i.e. define J in terms of Jalt and vice versa.-}
 
+\func Pointed-Type {A : \Type} (a : A) : \Type => \Sigma (x : A) (p : a = x)
+
+\func puncture {A : \Type} {a : A} : Pointed-Type a => (a, idp)
+
+\func path-create {A : \Type} {a : A} (b : Pointed-Type a) : puncture = b =>
+  path (\lam i => (b.2 @ i , path (\lam j => b.2 @ I.squeeze i j)))
+
+\func transport-from-Jalt {A : \Type} (B : A -> \Type) {a a' : A} (p : a = a') : B a -> B a' => Jalt {A} (\lam x y (r : x = y) => B x -> B y) (\lam _ w => w) p
+
+\func J-from-Jalt {A : \Type} {a : A} (B : \Pi (a' : A) -> a = a' -> \Type)
+         (b : B a idp) {a' : A} (p : a = a') : B a' p =>
+  transport' {\Sigma (x : A) (a = x)} (\lam p => B p.1 p.2) {(a, idp)} {(a', p)} (path-create (a', p)) b
+
+\func Jalt-from-J
+  {A : \Type} (B : \Pi (a a' : A) -> a = a' -> \Type)
+  (b : \Pi (a : A) -> B a a idp)
+  {a a' : A} (p : a = a') : B a a' p => J {A} {a} (\lam (a' : A) (p : a = a') => B a a' p) (b a) p
+
+
+{-Exercise 2: Prove that vnil is identity for the operation v++.-}
+
+\data Vec (A : \Type) (n : Nat) \elim n
+  | zero => vnil
+  | suc n => vcons A (Vec A n)
+
+\func \infixl 4 v++ {A : \Type} {n m : Nat} (xs : Vec A n) (ys : Vec A m) : Vec A (m + n) \elim n, xs
+  | 0, vnil => ys
+  | suc n, vcons x xs => vcons x (xs v++ ys)
+
+\func zero-ide {n : Nat} : n + 0 = n => idp
+
+\func vnil-is-identity {A : \Type} {n : Nat} (xs : Vec A n) : vnil v++ xs = xs => idp
+
+-- Definition of <= via equality.
+\func LessOrEq''' (n m : Nat) => \Sigma (k : Nat) (k + n = m)
+
+-- Recursive definition of <=.
+\func lessOrEq (n m : Nat) : \Type
+  | 0, _ => Unit
+  | suc _, 0 => Empty
+  | suc n, suc m => lessOrEq n m
+
+-- First inductive definition of <=.
+\data LessOrEq (n m : Nat) \with
+  | 0, m => z<=n
+  | suc n, suc m => s<=s (LessOrEq n m)
+
+\data LessOrEq' (n m : Nat)
+  | z<=n' (n = 0)
+  | s<=s' {n' m' : Nat} (n = suc n') (m = suc m') (LessOrEq' n' m')
+
+-- Third inductive definition of <=.
+\data LessOrEq'' (n m : Nat) \elim m
+  | suc m => <=-step (LessOrEq'' n m)
+  | m => <=-refl (n = m)
+
+
+{-Exercise 4: Define the membership predicate In for lists.-}
+
+\func \infix 7 In {A : \Type} (a : A) (xs : List A) : \Type \elim xs
+  | nil => Empty
+  | cons x xs => \Sigma (a = x) (a In xs)
+
+{-Exercise 5: Define reflexive and transitive closure of a relation.
+That is ReflTransClosure R – is the minimal reflexive and transitive relation containing R.-}
+
+\func isReflexive {A : \Type} (r : A -> A -> \Type) => \Pi (a : A) -> r a a
+\func isTransitive {A : \Type} (r : A -> A -> \Type) => \Pi (a b c : A) -> r a b -> r b c -> r a c
+
+\func trivial {A : \Type} (a b : A) => a = b
+
+\func n-connected-extension {A : \Type} (r : A -> A -> \Prop) (n : Nat) : A -> A -> \Type \elim n
+  | 0 => \lam a b => a = b
+  | suc n => \lam a b => \Sigma (c : A) (n-connected-extension r n a c) (r c b)
+
+\func ReflTransClosure {A : \Set} (r : A -> A -> \Prop) : A -> A -> \Type =>
+  \lam a b => \Sigma (n : Nat) ((n-connected-extension r n) a b)
+
+
+\func clos-is-refl {A : \Type} (r : A -> A -> \Type) : isReflexive (ReflTransClosure r) =>
+  \lam (x : A) => (ReflTransClosure r).0 idp
 
 
 
+{- 7. Define the predicate xs <= ys for lists, which says "the list xs is a sublist of ys". -}
 
+\data \infix 4 <= {A : \Type} (xs : List A) (ys : List A) \elim xs, ys
+  | nil, _ => nil<=_
+  | cons x xs, cons y ys => here (x = y) (xs <= ys)
+  | xs, cons y ys => there (xs <= ys)
 
+\func filter {A : \Type} (p : A -> Bool) (xs : List A) : List A \elim xs
+  | nil => nil
+  | cons a xs => if (p a) (cons a(filter p xs)) (filter p xs)
 
+{- 8. Prove that 'filter xs <= xs' for any list xs. -}
+
+\func proof {A : \Type} (fn : A -> Bool) (xs : List A) : filter fn xs <= xs \elim xs
+  | nil => nil<=_
+  | cons a xs => proof-cons (fn a) a (filter fn xs) xs (proof fn xs)
+  \where {
+    \func proof-cons {A : \Type} (b : Bool) (a : A) (xs ys : List A) (p : xs <= ys)
+      : filter.filter-cons b a xs <= cons a ys \elim b
+      | true => here idp p
+      | false => there p
+  }
+}

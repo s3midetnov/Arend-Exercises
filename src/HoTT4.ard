@@ -1,0 +1,34 @@
+\import fifth
+\import fourth (inv)
+\import second
+
+\data Circle
+  | base
+  | loop I \with {
+    | left => base
+    | right => base
+  }
+\data Susp (A : \Type)
+  | south
+  | north
+  | merid A (i : I) \elim i {
+    | left => north
+    | right => south
+  }
+\func Sphere (n : Nat) : \Type \lp \oo
+  | 0 => Susp Empty
+  | suc n => Susp (Sphere n)
+
+\func CircleToSphere1 (x : Circle) : Sphere 1
+  | base => north
+  | loop i => (path (merid north) *> inv (path (merid south))) @ i
+
+\func Sphere1ToCircle (x : Sphere 1) : Circle
+  | south => base
+  | north => base
+  | merid north i => loop i
+  | merid south i => base
+  | merid (merid () _) _
+
+\func Circ-S1-Circ (x : Circle) : x = Sphere1ToCircle (CircleToSphere1 x)
+  => {?}

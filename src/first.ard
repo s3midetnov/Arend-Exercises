@@ -1,3 +1,4 @@
+\import fourth (step-of-ind)
 \import second
 \import third
 
@@ -27,7 +28,7 @@ and return the first element when b equals to true and the second one otherwise.
   | true => false
   | false => true
 
-\func if {A : \Type} (b : Bool) (x y : A) : A \elim b
+\func if {A : \Type} (b : Boaol) (x y : A) : A \elim b
   | true => x
   | false => y
 
@@ -65,31 +66,25 @@ and return the first element when b equals to true and the second one otherwise.
   | 0, suc m => true
   | suc n, suc m => n < m
 
-\func \infixr 5 - (x y : Nat) : Maybe Nat \elim x, y
-  | n, 0 => just n
-  | 0, _ => nothing
-  | suc n, suc m => n - m
+\func \infixr 5 stupid- (x y : Nat) : Nat \elim x, y
+  | n, 0 =>  n
+  | 0, _ => 0
+  | suc n, suc m => n stupid- m
 
 {-Exercise 5: Define mod and gcd.-}
-\func \infixl 2 ?: {A : \Type} (a : Maybe A) (b : A) : A \elim a
-  | nothing => b
-  | just a => a
+
+\func mod-helper(s x y : Nat) : Nat \elim s
+  | 0 => 0
+  | suc s => if (x < y) x (mod-helper s (x stupid- y) y)
+
+\func mod (x y : Nat) : Nat => mod-helper x x y
 
 
-\func check : Nat => (three - four ?: 0)
+\func gcd-helper (s x y : Nat) : Nat \elim s
+  | 0 => 0
+  | suc s => if (x < y) (gcd-helper s x (y stupid- x)) (if (y < x) (gcd-helper s (x stupid- y) y) x)
 
-\func \infixl 1 mod (x y : Nat) : Maybe Nat \elim x, y
-  | _, 0 => nothing
-  | n, suc m => if (n < suc m) (just n)
-
-
-\func gcd (n m : Nat) : Nat => {?} -- helper (just n) (just m) \where
---  \func helper (a b : Maybe Nat) : Nat \elim a, b
---    | nothing, _ => 0
---    | _, nothing => 0
---    | just a, just 0 => a
---    | just a, just b => helper (just b) (a mod b)
-
+\func gcd (x y : Nat): Nat => gcd-helper x x y
 
 {-Exercise 6: Define the map function.-}
 \data List (A : \Type) | nil | cons A (List A)

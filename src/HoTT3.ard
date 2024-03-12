@@ -1,0 +1,40 @@
+\import HoTT1 (sigmaEq)
+\import HoTT2
+
+\func isInj {A B : \Set} (f : A -> B) => \Pi (x y : A) -> f x = f y -> x = y
+
+\truncated \data Trunc (A : \Type) : \Prop
+  | in A
+  \where {
+    \func map {A B : \Type} (f : A -> B) (x : Trunc A) : Trunc B \elim x
+      | in a => in (f a)
+
+    \lemma extract {A : \Type} (x : Trunc A) (p : isProp A) : \level A p \elim x
+      | in a => a
+  }
+
+-- Note that \Sigma (a : A) (f a = b) is not
+-- necessarily a proposition and should be truncated.
+\func isSur {A B : \Set} (f : A -> B) : \Prop =>
+  \Pi (b : B) -> Trunc (\Sigma (a : A) (f a = b))
+-- \Pi (b : B) ->        \Sigma (a : A) (f a = b)
+
+
+\func isBij {A B : \Set} (f : A -> B) => \Sigma (g : B -> A) (\Pi (x : A) -> g (f x) = x) (\Pi (y : B) -> f (g y) = y)
+
+--\func isBij->isInj {A B : \Set} (f : A -> B) (p : isBij f) : isInj f => \lam x y q => sym (p.2 x) *> pmap p.1 q *> p.2 y
+
+\func isBij->isSur {A B : \Set} (f : A -> B) (p : isBij f) : isSur f => \lam b => in (p.1 b, p.3 b)
+
+\func sigmaEq' {A : \Type} (B : A -> \Prop) (t1 t2 : \Sigma (x : A) (B x)) (p : t1.1 = t2.1)
+  => sigmaEq B t1 t2 p (Path.inProp _ _)
+
+{- Exercise 1: Prove that the predecessor function pred on Nat is surjective. -}
+\func pred (n : Nat) : Maybe Nat \elim n
+  | 0 => nothing
+  | suc n => n
+
+\func pred-is-surj : isSur pred =>
+  \lam (x : Maybe Nat) \case x \with{
+    | nothing =>
+}

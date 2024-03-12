@@ -7,14 +7,15 @@
     <list default="true" id="94d4be5e-9b56-4966-96e1-ef10b8a671ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/HoTT1.arc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/fifth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/fifth.arc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/fifth.arc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/first.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/first.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/fourth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/fourth.arc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/second.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/second.arc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/seventh.arc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/sixth.arc" beforeDir="false" afterPath="$PROJECT_DIR$/bin/sixth.arc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HoTT1.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/HoTT1.ard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fifth.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/fifth.ard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/first.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/first.ard" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fourth.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/fourth.ard" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sixth.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/sixth.ard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/seventh.ard" beforeDir="false" afterPath="$PROJECT_DIR$/src/seventh.ard" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +32,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2c8sxZVHHOkaDLcJryoleLyHLjg" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -38,10 +42,13 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Arend Typecheck.Typecheck fac-neq-suc.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/artem/Documents/Arend-Exercises/src&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/artem/Documents/Arend-Exercises&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -57,8 +64,8 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Arend Typecheck.Typecheck T_">
-    <configuration name="Typecheck T" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+  <component name="RunManager" selected="Arend Typecheck.Typecheck fac-neq-suc">
+    <configuration name="Typecheck J-from-Jalt" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="Arend-Exercises" />
       <option name="allowRunningInParallel" value="false" />
       <option name="projectPathOnTarget" />
@@ -66,13 +73,13 @@
         <list />
       </option>
       <parameters>
-        <option name="definitionFullName" value="T" />
+        <option name="definitionFullName" value="J-from-Jalt" />
         <option name="library" value="Arend-Exercises" />
-        <option name="modulePath" value="second" />
+        <option name="modulePath" value="fifth" />
       </parameters>
       <method v="2" />
     </configuration>
-    <configuration name="Typecheck T_" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+    <configuration name="Typecheck Pointed-Type (1)" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="Arend-Exercises" />
       <option name="allowRunningInParallel" value="false" />
       <option name="projectPathOnTarget" />
@@ -80,13 +87,41 @@
         <list />
       </option>
       <parameters>
-        <option name="definitionFullName" value="T_" />
+        <option name="definitionFullName" value="Pointed-Type" />
+        <option name="library" value="Arend-Exercises" />
+        <option name="modulePath" value="fifth" />
+      </parameters>
+      <method v="2" />
+    </configuration>
+    <configuration name="Typecheck Pointed-Type" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="Arend-Exercises" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <parameters>
+        <option name="definitionFullName" value="Pointed-Type" />
+        <option name="library" value="Arend-Exercises" />
+        <option name="modulePath" value="fifth" />
+      </parameters>
+      <method v="2" />
+    </configuration>
+    <configuration name="Typecheck fac-neq-suc" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="Arend-Exercises" />
+      <option name="allowRunningInParallel" value="false" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <parameters>
+        <option name="definitionFullName" value="fac-neq-suc" />
         <option name="library" value="Arend-Exercises" />
         <option name="modulePath" value="fourth" />
       </parameters>
       <method v="2" />
     </configuration>
-    <configuration name="Typecheck ==" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+    <configuration name="Typecheck isReflexive" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="Arend-Exercises" />
       <option name="allowRunningInParallel" value="false" />
       <option name="projectPathOnTarget" />
@@ -94,47 +129,19 @@
         <list />
       </option>
       <parameters>
-        <option name="definitionFullName" value="==" />
+        <option name="definitionFullName" value="isReflexive" />
         <option name="library" value="Arend-Exercises" />
-        <option name="modulePath" value="second" />
-      </parameters>
-      <method v="2" />
-    </configuration>
-    <configuration name="Typecheck coprime" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="Arend-Exercises" />
-      <option name="allowRunningInParallel" value="false" />
-      <option name="projectPathOnTarget" />
-      <option name="selectedOptions">
-        <list />
-      </option>
-      <parameters>
-        <option name="definitionFullName" value="coprime" />
-        <option name="library" value="Arend-Exercises" />
-        <option name="modulePath" value="sixth" />
-      </parameters>
-      <method v="2" />
-    </configuration>
-    <configuration name="Typecheck not-isInvolution''" type="TypecheckRunConfiguration" factoryName="Arend Typecheck" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="Arend-Exercises" />
-      <option name="allowRunningInParallel" value="false" />
-      <option name="projectPathOnTarget" />
-      <option name="selectedOptions">
-        <list />
-      </option>
-      <parameters>
-        <option name="definitionFullName" value="not-isInvolution''" />
-        <option name="library" value="Arend-Exercises" />
-        <option name="modulePath" value="second" />
+        <option name="modulePath" value="fifth" />
       </parameters>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Arend Typecheck.Typecheck T_" />
-        <item itemvalue="Arend Typecheck.Typecheck coprime" />
-        <item itemvalue="Arend Typecheck.Typecheck not-isInvolution''" />
-        <item itemvalue="Arend Typecheck.Typecheck ==" />
-        <item itemvalue="Arend Typecheck.Typecheck T" />
+        <item itemvalue="Arend Typecheck.Typecheck fac-neq-suc" />
+        <item itemvalue="Arend Typecheck.Typecheck Pointed-Type (1)" />
+        <item itemvalue="Arend Typecheck.Typecheck Pointed-Type" />
+        <item itemvalue="Arend Typecheck.Typecheck isReflexive" />
+        <item itemvalue="Arend Typecheck.Typecheck J-from-Jalt" />
       </list>
     </recent_temporary>
   </component>
@@ -150,7 +157,15 @@
       <workItem from="1707942731544" duration="11678000" />
       <workItem from="1708195839550" duration="7641000" />
       <workItem from="1708447235011" duration="712000" />
-      <workItem from="1708532372083" duration="4883000" />
+      <workItem from="1708532372083" duration="9370000" />
+      <workItem from="1708762831583" duration="6829000" />
+      <workItem from="1708938170399" duration="3314000" />
+      <workItem from="1708969240953" duration="13000" />
+      <workItem from="1708977032276" duration="4751000" />
+      <workItem from="1709027842381" duration="3554000" />
+      <workItem from="1709032831844" duration="12674000" />
+      <workItem from="1709370178236" duration="22000" />
+      <workItem from="1709426967258" duration="4302000" />
     </task>
     <servers />
   </component>

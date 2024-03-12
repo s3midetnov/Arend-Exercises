@@ -1,0 +1,14 @@
+\import second
+
+\func isProp (A : \Type) => \Pi (x y : A) -> x = y
+
+\data Dec (A : \Prop)
+  | yes A
+  | no (A -> Empty)
+  \where
+    \use \level isProp {P : \Prop} (d1 d2 : Dec P) : d1 = d2
+      | yes x1, yes x2 => path (\lam i => yes (Path.inProp x1 x2 @ i))
+      | yes x1, no e2 => \case e2 x1 \with {}
+      | no e1, yes x2 => \case e1 x2 \with {}
+      | no e1, no e2 => path (\lam i => no (\lam x => (\case e1 x \return e1 x = e2 x \with {}) @ i))
+

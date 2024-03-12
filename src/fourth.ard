@@ -133,6 +133,8 @@
 
 {-Exercise 10: Define recursor and eliminator for List.-}
 
+\func List-elim {A : \Type} (P : List A -> \Type) (z : P nil) (f : \P)
+
 {-Exercise 11: We defined transport via coe. It is possible to define a special case of coe via transport.
 Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possible to define transport via coe0?-}
 
@@ -164,7 +166,6 @@ Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possibl
 
 {-Exercise 14: Prove that fac does not equal to suc.-}
 
-\func bigger-hence-not-equal (n m : Nat) (p : n < m = true) (q : n = m) : Empty => {?}
 
 \func two-action (f : Nat -> Nat) : Nat => f two
 
@@ -172,9 +173,7 @@ Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possibl
 
 \func check1 : (two-action fac) = two  => idp
 \func check2 : (two-action suc) = three  => idp
-\func special-helper {A B : \Type} {f : A -> B} {a a_ b b_ : A} (p : f a = f b) (q : a = a_) (qq : b = b_) :
-  (f a_ = f b_) => {?}
 
---\func fac-neq-suc (p : fac = suc) : Empty =>
---  two-neq-three (two-action r check1 check2)
---  \where \func r : two-action fac = two-action suc => pmap two-action p
+\func fac-neq-suc (p : fac = suc) : Empty =>
+  two-neq-three r
+  \where \func r : two-action fac = two-action suc => pmap two-action p
