@@ -44,7 +44,6 @@
 \func pmap-from-transport {A B : \Type} (f : A -> B) {a a' : A} (p : a = a') : f a = f a' => pmap f p
 -- it is already defined through transport
 
-
 \func transport-from-repl-and-pmap {A : \Type} (B : A -> \Type) {a a' : A} (p : a = a') (b : B a) : B a'
   => repl (pmap B p ) b
 
@@ -121,19 +120,48 @@
 \func checker : Nat -> \Type =>
   \lam (z : Nat) => \Pi (x y : Nat) -> (x + y) + z = x + (y + z)
 
-\func base-of-ind : \Pi (x y : Nat) -> (x + y) + 0 = x + (y + 0) => {?}
-
-\func step-of-ind : \Pi(n : Nat) -> checker n -> checker (suc n) => {?}
-
-\func +-is-assoc (x y z : Nat) : (x + y) + z = x + (y + z) => (Nat-elim checker base-of-ind step-of-ind z) x y
+\func +-assoc {x y z : Nat} : (x + y) + z = x + y + z =>
+  Nat-elim (\lam n => (x + y) + n = x + y + n) idp (\lam _ p => idp) z
 
 
 {-Exercise 9: Define recursor and eliminator for \data D | con1 Nat | con2 D D | con3 (Nat -> D).-}
 \data D | con1 Nat | con2 D D | con3 (Nat -> D)
 
-{-Exercise 10: Define recursor and eliminator for List.-}
+\func D-elim (P : D -> \Type)
+             (constr1 : \Pi (n : Nat) -> P (con1 n))
+             (constr2 : \Pi (a b : D) (p : P a) (q : P b) -> P (con2 a b))
+             (constr3 : \Pi (f : Nat -> D) (p : \Pi (x : Nat) -> P (f x)) -> P (con3 f))
+             (d : D) : P d \elim d
+  | con1 n => constr1 n
+  | con2 d1 d2 => constr2 d1 d2 (D-elim P constr1 constr2 constr3 d1) (D-elim P constr1 constr2 constr3 d2)
+  | con3 f => constr3 f (Nat-elim
+      (\lam n => P (f n))
+      (D-elim P constr1 constr2 constr3 (f 0))
+      (\lam n _ => (D-elim P constr1 constr2 constr3 (f (suc n))))
+  )
 
-\func List-elim {A : \Type} (P : List A -> \Type) (z : P nil) (f : \P)
+\func D-rec (P : \Type)
+            (constr1 : Nat -> P)
+            (constr2 : D -> D -> P -> P -> P)
+            (constr3 : (Nat -> D) -> (Nat -> P) -> P)
+            (d : D) : P =>
+  D-elim (\lam _ => P) constr1 constr2 constr3 d
+
+{-Exercise 10: Define recursor and eliminator for List.-}
+\func List-elim {A : \Type}
+                (P : List A -> \Type)
+                (n : P nil)
+                (cnstr : \Pi (a : A) (as : List A) (p : P as) -> P (cons a as))
+                (as : List A) : P as \elim as
+  | nil => n
+  | cons a as => cnstr a as (List-elim P n cnstr as)
+
+\func List-rec {A : \Type}
+               (P : \Type)
+               (n : P)
+               (cnstr : A -> List A -> P -> P)
+               (as : List A) : P =>
+  List-elim (\lam _ => P) n cnstr as
 
 {-Exercise 11: We defined transport via coe. It is possible to define a special case of coe via transport.
 Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possible to define transport via coe0?-}
@@ -166,13 +194,12 @@ Define coe0 (A : I -> \Type) (a : A left) : A right via transport. Is it possibl
 
 {-Exercise 14: Prove that fac does not equal to suc.-}
 
-
 \func two-action (f : Nat -> Nat) : Nat => f two
 
 \func two-neq-three (p : 2 = 3) : Empty
 
-\func check1 : (two-action fac) = two  => idp
-\func check2 : (two-action suc) = three  => idp
+\func check1 : two-action fac = two  => idp
+\func check2 : two-action suc = three  => idp
 
 \func fac-neq-suc (p : fac = suc) : Empty =>
   two-neq-three r

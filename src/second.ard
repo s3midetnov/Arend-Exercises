@@ -79,7 +79,7 @@
 
 
 {-Exercise 9: Prove that if there is no x : Nat such that P x holds, then P 3 is false.-}
--- forall x : Nat not(P x) => not P(3)
+-- forall x : Nat not(P x) ==> not P(3)
 
 \data Empty
 
