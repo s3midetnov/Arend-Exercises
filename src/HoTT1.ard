@@ -119,7 +119,6 @@ It is allowed to use the fact that Nat is a set without a proof.-}
 \func embed-property {A : \Type} {B : \Type} (q : isProp B) (f : A -> B) (inj : isInj f) : isProp A =>
   \lam (a a' : A) => inj a a' (q (f a) (f a'))
 
-
 {-Exercise 9: Prove that a type with decidable equality is a set.
 Note that this implies that Nat is a set since we have already proved that Nat has decidable equality.-}
 
@@ -139,15 +138,6 @@ Note that this implies that Nat is a set since we have already proved that Nat h
 
 {-Exercise 10: Prove that if A and B are sets, then A Or B is also a set.-}
 
---\func or-pres-sets (A B : \Set) : isSet (A Or B)
-\data \infix 3 Or (A B : \Type)
-  | inl A
-  | inr B
-
-\func helper-for-or-is-set (A B : \Set) (x : A) (y : B) (p : inl x = {A Or B} inr y) : Empty => {?}
-
-\func for-or-is-set (A B : \Set) (x y : A Or B) : isProp (x = y) \elim x, y
-  | inl x, inl y => 
 
 
 {-Exercise 11: Prove that if B x is a set, then \Pi (x : A) -> B x is a set.-}

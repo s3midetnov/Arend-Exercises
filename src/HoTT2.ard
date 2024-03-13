@@ -1,3 +1,4 @@
+\import eighth
 \import second
 
 \func isProp (A : \Type) => \Pi (x y : A) -> x = y
@@ -12,3 +13,44 @@
       | no e1, yes x2 => \case e1 x2 \with {}
       | no e1, no e2 => path (\lam i => no (\lam x => (\case e1 x \return e1 x = e2 x \with {}) @ i))
 
+{-Exercise 2: Prove that if A : \Prop, then Trunc A is equivalent to A.-}
+
+\truncated \data Trunc (A : \Type) : \Prop
+  | trunc A
+
+\func Trunc-elim {A : \Type} {B : \Prop} (f : A -> B) (a : Trunc A) : B \elim a
+  | trunc a => f a
+
+\func \infix 1 <-> (A B : \Type) => \Sigma (A -> B) (B -> A)
+
+
+\func idA {A : \Type} (a : A) : A => a
+\func trunc-prop {A : \Prop} : Trunc A <-> A => (Trunc-elim idA , trunc)
+
+
+{- Exercise 3: Prove the following de Morgan’s law: -}
+\truncated \data \fixr 2 Or (A B : \Type) : \Prop
+  | inl A
+  | inr B
+
+\func deMorgan (A B C : \Prop) : (\Sigma A (B `Or` C)) <-> ((\Sigma A B) `Or` (\Sigma A C))
+  => (\lam x => deMorg1 A B C x.1 x.2, deMorg2 A B C)
+
+\func deMorg1 (A B C : \Prop) (a : A) (w : B `Or` C) : (\Sigma A B) `Or` (\Sigma A C) \elim w
+  | inl b => inl (a, b)
+  | inr c => inr (a, c)
+
+\func deMorg2 (A B C : \Prop) (w : (\Sigma A B) `Or` (\Sigma A C)) : \Sigma A (B `Or` C) \elim w
+  | inl a-b => (a-b.1, inl a-b.2)
+  | inr a-c => (a-c.1, inr a-c.2)
+
+{- 4. Define eliminator for 'Or' via 'Or-rec' not using pattern matching on 'Or'.-}
+
+\func Or-elim {A B : \Prop} (C : Or A B -> \Prop)
+              (f : \Pi (x : A) -> C (inl x)) (g : \Pi (y : B) -> C (inr y))
+              (p : A `Or` B) : C p \elim p
+  | inl a => f a
+  | inr b => g b
+
+
+-- 6. Prove that '\Prop' is a set.
