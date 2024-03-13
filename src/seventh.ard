@@ -1,7 +1,7 @@
 \import fifth
 \import first
 \import fourth
-\import second
+\import sixth (tt)
 
 {- Exercise 1: Implement any sorting algorithm using
  \case for pattern matching on the result of comparison of elements of a list.-}
@@ -70,35 +70,37 @@
 
 {-Exercise 3: Prove that, for every function f : Bool -> Bool and every x : Bool, it is true that f (f (f x)) = f x-}
 
-\func three-applic' (f : Bool -> Bool) (q : f true = false): f (f (f true)) = f true =>
-  \case (f false) \as b', idp : (b' = f false) \return f (f (f true)) = f true \with {
-    | true, p => f (f (f true)) ==< pmap (\lam x => f (f x)) q >==
-                f (f false) ==< pmap f (inv p) >== f true
-    | false, p => f (f (f true)) ==< pmap (\lam x => f (f x)) q >==
-                f (f false) ==< pmap f (inv p) >== f true
-  }
+--\func three-applic' (f : Bool -> Bool) (q : f true = false): f (f (f true)) = f true =>
+--  \case (f false) \as b', idp : (b' = f false) \return f (f (f true)) = f true \with {
+--    | true, p => f (f (f true)) ==< pmap (\lam x => f (f x)) q >==
+--                f (f false) ==< pmap f (inv p) >== f true
+--    | false, p => f (f (f true)) ==< pmap (\lam x => f (f x)) q >==
+--                f (f false) ==< pmap f (inv p) >== f true
+--  }
 
-
-\func three-applic (f : Bool -> Bool) (x : Bool) : f( f (f x)) = f x
-   =>
-     \case (f false) \as b, (f true) \as b', idp : (b = f false), idp : (b' = f true) \with{
-    | false, false, p, p1 => {?}
-    | false, true, p, p1 => {?}
-    | true, false, p, p1 => {?}
-    | true, true, p, p1 => {?}
-  }
+\func proof {f : Bool -> Bool} {x : Bool} : f (f (f x)) = f x \elim x
+  | true =>
+    \case f true \as ft, f false \as ff, idp : f true = ft, idp : f false = ff
+    \return f (f ft) = ft
+    \with {
+      | true, true, p, q => pmap f p *> p
+      | true, false, p, q => pmap f p *> p
+      | false, true, p, q => pmap f q *> p
+      | false, false, p, q => pmap f q *> q
+    }
+  | false =>
+    \case f true \as ft, f false \as ff, idp : f true = ft, idp : f false = ff
+    \return f (f ff) = ff \with {
+      | true, true, p, q => pmap f p *> p
+      | true, false, p, q => pmap f q *> q
+      | false, true, p, q => pmap f p *> q
+      | false, false, p, q => pmap f q *> q
+    }
 
 
 
 {-Exercise 4: Define the view, which represents a natural number as a pair of the quotient
 and the remainder of division by a positive m. Implement the division function.-}
-
-
-\data modView {m : Nat} (n : Nat)
-  | repr (q r : Nat) (_ : T (r < m)) (_ : T(0 < m)) (n = q * m + r)
-
-\func to-mod {m : Nat} (n : Nat) : modView {m} n
-
 
 {-Exercise 5: Prove that the predicate ‘isEven’ is decidable.-}
 
@@ -112,4 +114,17 @@ and the remainder of division by a positive m. Implement the division function.-
 
 \func DecPred {A : \Type} (P : A -> \Type) => \Pi (a : A) -> Decide (P a)
 
-\func decidEven : DecPred (even)
+\func isEven (n : Nat) : Bool
+  | 0 => true
+  | suc n => not (isEven n)
+
+\func T (b : Bool) : \Type
+  | true => Unit
+  | false => Empty
+
+\func even-dec : DecPred (\lam n => T (isEven n)) =>
+  \lam n => \case isEven n \as e \return Decide (T e)
+      \with {
+        | true => yes unit
+        | false => no (\lam x => x)
+      }

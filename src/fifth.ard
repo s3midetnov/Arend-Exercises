@@ -1,6 +1,6 @@
 \import first
 \import fourth
-\import second (&&, Empty)
+\import second (&&, Empty, absurd)
 \import HoTT2
 
 \func \infixr 5 *> {A : \Type} {a a' a'' : A} (p : a = a') (q : a' = a'') : a = a''
@@ -54,7 +54,6 @@
   (b : \Pi (a : A) -> B a a idp)
   {a a' : A} (p : a = a') : B a a' p => J {A} {a} (\lam (a' : A) (p : a = a') => B a a' p) (b a) p
 
-
 {-Exercise 2: Prove that vnil is identity for the operation v++.-}
 
 \data Vec (A : \Type) (n : Nat) \elim n
@@ -92,6 +91,7 @@
   | suc m => <=-step (LessOrEq'' n m)
   | m => <=-refl (n = m)
 
+\func \infix 1 <-> (A B : \Type) => \Sigma (A -> B) (B -> A)
 
 {-Exercise 4: Define the membership predicate In for lists.-}
 
@@ -107,18 +107,22 @@ That is ReflTransClosure R – is the minimal reflexive and transitive relation 
 
 \func trivial {A : \Type} (a b : A) => a = b
 
-\func n-connected-extension {A : \Type} (r : A -> A -> \Prop) (n : Nat) : A -> A -> \Type \elim n
+\func n-connected-extension {A : \Type} (r : A -> A -> \Type) (n : Nat) : A -> A -> \Type \elim n
   | 0 => \lam a b => a = b
   | suc n => \lam a b => \Sigma (c : A) (n-connected-extension r n a c) (r c b)
 
-\func ReflTransClosure {A : \Set} (r : A -> A -> \Prop) : A -> A -> \Type =>
+\func ReflTransClosure {A : \Type} (r : A -> A -> \Type) : A -> A -> \Type =>
   \lam a b => \Sigma (n : Nat) ((n-connected-extension r n) a b)
 
 
 \func clos-is-refl {A : \Type} (r : A -> A -> \Type) : isReflexive (ReflTransClosure r) =>
-  \lam (x : A) => (ReflTransClosure r).0 idp
+  \lam (x : A) => (0, idp)
 
+\func rtc {A : \Type} (r : A -> A -> \Type) : A -> A -> \Type => ReflTransClosure r
 
+\func clos-is-trans {A : \Type} (r : A -> A -> \Type) : isTransitive (ReflTransClosure r) =>
+  \lam (a b c : A) (p : w a b) (q : w b c) =>
+    \where \func w => ReflTransClosure r
 
 {- 7. Define the predicate xs <= ys for lists, which says "the list xs is a sublist of ys". -}
 
@@ -129,17 +133,10 @@ That is ReflTransClosure R – is the minimal reflexive and transitive relation 
 
 \func filter {A : \Type} (p : A -> Bool) (xs : List A) : List A \elim xs
   | nil => nil
-  | cons a xs => if (p a) (cons a(filter p xs)) (filter p xs)
+  | cons a xs => if (p a) (cons a (filter p xs)) (filter p xs)
 
 {- 8. Prove that 'filter xs <= xs' for any list xs. -}
 
-\func proof {A : \Type} (fn : A -> Bool) (xs : List A) : filter fn xs <= xs \elim xs
-  | nil => nil<=_
-  | cons a xs => proof-cons (fn a) a (filter fn xs) xs (proof fn xs)
-  \where {
-    \func proof-cons {A : \Type} (b : Bool) (a : A) (xs ys : List A) (p : xs <= ys)
-      : filter.filter-cons b a xs <= cons a ys \elim b
-      | true => here idp p
-      | false => there p
-  }
-}
+
+
+
